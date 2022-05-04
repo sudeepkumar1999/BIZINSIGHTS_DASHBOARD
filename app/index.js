@@ -15,16 +15,16 @@ import {name as appName} from './app.json';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/integration/react'
 
-const persistConfig = {
-  key: 'root',
-  storage:AsyncStorage,
-  stateReconciler:autoMergeLevel2,
-  whiteList:['deviceInfo', 'user','dashboard', 'client'],
-  blacklist: ['asyncStore', 'update', 'ui']
+// const persistConfig = {
+//   key: 'root',
+//   storage:AsyncStorage,
+//   stateReconciler:autoMergeLevel2,
+//   whiteList:['deviceInfo', 'user','dashboard', 'client'],
+//   blacklist: ['asyncStore', 'update', 'ui']
   
-}
+// }
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+//const persistedReducer = persistReducer(persistConfig, reducers);
 export const store =createStore(reducers, {},  applyMiddleware(ReduxThunk));
 const  persistor = persistStore(store)
 
