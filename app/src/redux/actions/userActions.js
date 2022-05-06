@@ -11,7 +11,7 @@ import { store } from '../../../index'
 import {generateDate,generateHashCode, generateUUID } from '../../utilitis'
 var asyncStorageHandler = new AsyncStorageHanlder();
 import NavigationService from '../../lib/NavigationService'
-import {getTableauDasboard, getBusinessStratTime} from './dashboardActions'
+import {getTableauDasboard, getBusinessStartTime, getSalesDashboard} from './dashboardActions'
 
 export function intialSetUp( deviceGUID, clientDTO, gatewayURL)
 {
@@ -59,7 +59,7 @@ export function authenticateUser(loginId, password) {
                   });
                   asyncStorageHandler.setItem(Constants.SET_USER_ID,response.data.userDTO.LoginId)
 
-                
+                  dispatch(getSalesDashboard())
                   dispatch(getClientApp(loginId, password,response.data?.userDTO?.UserId , response.data?.userDTO?.SiteId));
 
                   asyncStorageHandler.setItem(Constants.USER_NAME,response.data.userDTO.UserName)

@@ -40,10 +40,11 @@ var asyncStorageHandler=new AsyncStorageHanlder();
 
     gotoRegestrationScreen()
     {
-        NavigationService.reset({
+        setTimeout(()=>NavigationService.reset({
             index: 0,
             actions: [NavigationService.navActions("RegestrationScreen")]
-          })
+          }), 0)
+        
 
     }
 

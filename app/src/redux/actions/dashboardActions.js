@@ -1,44 +1,103 @@
 import * as types from './types'
 import ServiceHandler from '../../services/APIHandler'
 import * as Constants from '../../constants'
-import  AsyncStorageHanlder from '../../services/AsyncStorageHanlder'
+import  AsyncStorageHandler from '../../services/AsyncStorageHanlder'
 import { ParafaitServer } from '../../constants/ParafaitServer'
 import { store } from '../../../index'
 import {fetchBusinessDate} from '../../utilitis'
-var asyncStorageHandler=new AsyncStorageHanlder();
+var TOTAL_COLLECTION_SITE_ID="9999"
+var asyncStorageHandler=new AsyncStorageHandler();
 
-
-
-    export const getBusinessStratTime=(showLoader=true)=>{
-
-        return (dispatch,getState)=>{
-        
-            if(showLoader) dispatch({ type: types.FETCH_START_TIME_REQUEST });
-            ServiceHandler.get({ url: "api/Configuration/ParafaitDefaults", data: { queryParameters: { defaultValueName:Constants.BUSINESS_DAY_START_TIME, isActive:Constants.isActive   } }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+    export const getSalesDashboard=()=>{
+        return (dispatch, getState)=>{
+            dispatch({type:types.FETCH_SALES_DASHBOARD_REQUEST})
+            ServiceHandler.get({ url: "api/Report/SalesDashboard", data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
             .then(response => {
-                console.log("business response " + response.data);
+             
                 try {
                     if (response instanceof Error)
                         throw response;
-                    if (response.statusCode === 200 &&  response.data[0]?.DefaultValue ) 
+                    if (response.statusCode === 200  ) 
                     {
-                        //console.log("business start time sucess " + response.data[0].DefaultValue);
+                      
+
+                       const  siteCollectionList=response?.data?.SiteCollectionList
+                     
+                      
+                       var  sitList=[]
+                       var totalCollection={}
+                       
+
+                        if(siteCollectionList?.length>0)
+                        {
+                           siteCollectionList.forEach((element, index, array) => {
+                               
+                               if(element.hasOwnProperty("WeeklyCollectionPOS")&& Array.isArray(element.WeeklyCollectionPOS)&&element.WeeklyCollectionPOS.length)
+                               {
+                                let posCollections=[];
+                                
+                                element.WeeklyCollectionPOS.forEach((ele, index,array)=>
+                                {
+                                 
+                                    posCollections.push(ele)
+
+                                })
+
+                               
+                            
+                        
+
+
+                            const {SiteId,
+                                SiteName,
+                                CollectionToday,
+                                CollectionPreviousDay,
+                                CollectionWeek,
+                                GamePlayToday,
+                                GamePlayPreviousDay,
+                                GamePlayWeek,
+                                GamePlayPreviousWeek
+                               }=element
+                            let sitCollection={
+                                SiteId,
+                                SiteName,
+                                CollectionToday,
+                                CollectionPreviousDay,
+                                CollectionWeek,
+                                GamePlayToday,
+                                GamePlayPreviousDay,
+                                GamePlayWeek,
+                                GamePlayPreviousWeek,
+                                PosCollections:posCollections
+                                
+
+                            }
+                            if(sitCollection.SiteId!=TOTAL_COLLECTION_SITE_ID)
+                                sitList.push(sitCollection)
+                            else
+                                totalCollection=sitCollection;
+
+                               }
+                              
+
+                            
+
+                            });
+                          
+
+                        }
 
                   
     
-                        dispatch({ type: types.FETCH_START_TIME_SUCCESS, payload:response.data[0]?.DefaultValue??6});
-                        asyncStorageHandler.setItem(Constants.SET_START_TIME, response.data[0]?.DefaultValue)
-                        dispatch(getTableauDasboard(showLoader))
-                        //let startTime=response.data[0]?.DefaultValue??6
+                        dispatch({ type: types.FETCH_SALES_DASHBOARD_SUCCESS, payload:response.data[0]?.DefaultValue??6});
+                      
                         
                           
                     }
                     else
                     {
-                        dispatch({ type: types.FETCH_START_TIME_FAILURE, payload:null });
-                        //asyncStorageHandler.setItem(Constants.SET_START_TIME,"6")
-
-                        dispatch(getTableauDasboard(showLoader))
+                        dispatch({ type: types.FETCH_SALES_DASHBOARD_FAILURE, payload:null });
+                     
                        
 
 
@@ -49,29 +108,79 @@ var asyncStorageHandler=new AsyncStorageHanlder();
                     }
                 }
                 catch (error) {
-                    console.log(" buisness error" + error)
+                    
                     dispatch({ type: types.FETCH_START_TIME_FAILURE, payload: null });
-                    //asyncStorageHandler.setItem(Constants.SET_START_TIME,"6")
-                    dispatch(getTableauDasboard())
+                    
+                }
+            })
+            .catch((error) => {
+                
+                dispatch({ type: types.FETCH_START_TIME_FAILURE, payload: null });
+               
+                
+            });
+        }
+    }
+
+    export const getBusinessStartTime=(showLoader=true)=>{
+
+        return (dispatch,getState)=>{
+        
+            if(showLoader) dispatch({ type: types.FETCH_START_TIME_REQUEST });
+            ServiceHandler.get({ url: "api/Configuration/ParafaitDefaults", data: { queryParameters: { defaultValueName:Constants.BUSINESS_DAY_START_TIME, isActive:Constants.isActive   } }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+            .then(response => {
+                try {
+                    if (response instanceof Error)
+                        throw response;
+                    if (response.statusCode === 200 &&  response.data[0]?.DefaultValue ) 
+                    {
+                      
+
+                  
+    
+                        dispatch({ type: types.FETCH_START_TIME_SUCCESS, payload:response.data[0]?.DefaultValue??6});
+                        asyncStorageHandler.setItem(Constants.SET_START_TIME, response.data[0]?.DefaultValue)
+                        dispatch(getTableauDashboard(showLoader))
+                        
+                        
+                          
+                    }
+                    else
+                    {
+                        dispatch({ type: types.FETCH_START_TIME_FAILURE, payload:null });
+                  
+
+                        dispatch(getTableauDashboard(showLoader))
+                       
+
+
+                        
+
+                        
+
+                    }
+                }
+                catch (error) {
+                    
+                    dispatch({ type: types.FETCH_START_TIME_FAILURE, payload: null });
+                    dispatch(getTableauDashboard())
                 }
             })
             .catch((error) => {
                 console.log(" buisness error" + error)
                 dispatch({ type: types.FETCH_START_TIME_FAILURE, payload: null });
-                //asyncStorageHandler.setItem(Constants.SET_START_TIME,"6")
-                dispatch(getTableauDasboard(response.data[0]?.DefaultValue??6))
+                dispatch(getTableauDashboard(showLoader))
             });
          }
         }
 
 
         
-export const getTableauDasboard=(showLoader=true)=>
+export const getTableauDashboard=(showLoader=true)=>
 {
     return (dispatch,getState)=>{
         
         if(showLoader) dispatch({ type: types.FETCH_DASHBOARD_DETAILS_REQUEST });
-        //ServiceHandler.get({ url: "api/Report/Reports", data: { queryParameters: { isDashboard:Constants.IS_DASH_BOARD} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         ServiceHandler.get({ url: "api/Report/TableauDashboards", data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         .then(response => {
            
@@ -80,7 +189,9 @@ export const getTableauDasboard=(showLoader=true)=>
                     throw response;
                 if (response.statusCode === 200) 
                 {
+                    console.log("dashboard details ", JSON.stringify(response) )
 
+                
                 if(!Object.keys(response.data).length){
                  
                     
@@ -94,7 +205,7 @@ export const getTableauDasboard=(showLoader=true)=>
 
 
 
-                    //dispatch({ type: types.FETCH_DASHBOARD_DETAILS_FAILURE, payload: 'dashboard details not found'});
+                    
                 }
                 else
                 {
@@ -110,7 +221,7 @@ export const getTableauDasboard=(showLoader=true)=>
                        
                         dispatch(handleDashboardUpdate(true))
                     }
-                    // dispatch(handleDashboardUpdate(true))
+                
                
                     
                    
@@ -138,7 +249,7 @@ export const getTableauDasboard=(showLoader=true)=>
         })
         .catch((error) => {
             console.log("error" + error)
-           // dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
+       
 
         if(showLoader)
             dispatch({ type: types.FETCH_DASHBOARD_DETAILS_FAILURE, payload: error });
@@ -174,7 +285,6 @@ export const getTableauDasboard=(showLoader=true)=>
                  }
                )
             .then(response => {
-                console.log(" response " + response.data);
                 try {
                     if (response instanceof Error)
                         throw response;
@@ -188,13 +298,13 @@ export const getTableauDasboard=(showLoader=true)=>
                         dispatch({ type: types.FETCH_TOKEN_SUCCESS, payload:response.data});
                         dispatch(setURL(token, dbQuery));
     
-                      //  dispatch({ type: types.FETCH_TOKEN_SUCCESS, payload:response.data});
+                     
 
                         
                           
                     }
                     else {
-                        //dispatch({type:types.SET_ERROR_CODE, payload:response.statusCode})
+                        
                         dispatch({ type: types.FETCH_TOKEN_FAILURE, payload: new Error(response?.data || Constants.UNKNOWN_ERROR_MESSAGE) });
                 }
             }
@@ -203,9 +313,7 @@ export const getTableauDasboard=(showLoader=true)=>
                 }
             })
             .catch((error) => {
-                console.log("error" + error)
-                //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
-
+               
                 dispatch({ type: types.FETCH_TOKEN_FAILURE, payload: error });
             });
          }
@@ -216,18 +324,15 @@ export const getTableauDasboard=(showLoader=true)=>
     export function setURL(token, dbQuery)
     {
         return (dispatch, getState)=>{
-        console.log( "report url" + store.getState().dashboard.dbQuery)
+       
             
          let {formatedDate, formatedTime } =fetchBusinessDate();
-        //  console.log(" *******************token************" + token)
-        //  console.log("formated date "+  formatedDate);
          let loginId= store.getState().user.loginId;
-         //let reportURL=store.getState().dashboard.dbQuery
-        let reportURL=dbQuery
-        reportURL= reportURL.replace("@Token", token);
-        reportURL= reportURL.replace("@User", loginId);
-        reportURL= reportURL.replace("@Date", formatedDate);
-        reportURL= reportURL.replace("@Time", formatedTime);
+         let reportURL=dbQuery
+         reportURL= reportURL.replace("@Token", token);
+         reportURL= reportURL.replace("@User", loginId);
+         reportURL= reportURL.replace("@Date", formatedDate);
+         reportURL= reportURL.replace("@Time", formatedTime);
          dispatch({type: types.FETCH_TABLEU_URL_REQUEST})
          dispatch({type:types.SET_WEB_VIEW_URL , payload:reportURL})
         

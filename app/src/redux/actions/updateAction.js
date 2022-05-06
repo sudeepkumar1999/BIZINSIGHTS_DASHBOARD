@@ -74,7 +74,7 @@ export const checkForUpdate=async(securitycode)=>
            
             NavigationService.reset({
               index: 0,
-              actions: [NavigationService.navActions("HomeScreen")]
+              actions: [NavigationService.navActions("RegestrationScreen")]
             })
 
           }

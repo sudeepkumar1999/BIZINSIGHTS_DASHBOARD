@@ -1,7 +1,7 @@
 import React, {Component}from 'react'
 import {View, Text, FlatList,PlatForm,TouchableHighlight, TouchableWithoutFeedback, Button, TouchableOpacity,RefreshControl, StyleSheet,BackHandler,Alert,ScrollView, Linking} from  'react-native'
 import { connect } from 'react-redux'
-import {getTableauDasboard, getBusinessStratTime,getTableauToken, onLoadURL,fetchDataFromBackground,handleDashboardUpdate} from  '../redux/actions/dashboardActions'
+import {getTableauDashboard, getBusinessStartTime,getTableauToken, onLoadURL,fetchDataFromBackground,handleDashboardUpdate} from  '../redux/actions/dashboardActions'
 import { ParafaitServer } from '../constants/ParafaitServer'
 import {store} from '../../index'
 import  {HeaderIcon, HeaderTitle, Spinner} from '../components/index'
@@ -75,10 +75,7 @@ class HomeScreen extends Component
 
       onPress( ReportId, DBQuery)
       {
-        // if (flag == 1) {
-        //   this.setState({selected: true});
-        // }
-        // this.setState({SelectedButton: button})
+       
         this.handleSelection(ReportId)
         this.props.getTableauToken(ReportId,DBQuery)
       }
@@ -165,7 +162,7 @@ class HomeScreen extends Component
       if(this.props.dashboard.length==0)
       {
 
-      this.props.getBusinessStratTime()
+      this.props.getBusinessStartTime()
       }
       else{
        
@@ -176,7 +173,7 @@ class HomeScreen extends Component
         this.setState({
           dashboard:this.props.dashboard
         })
-        this.props.getBusinessStratTime(false)
+        this.props.getBusinessStartTime(false)
         
       }
       this.backHandler = BackHandler.addEventListener(
@@ -513,4 +510,4 @@ const styles=StyleSheet.create({
 
 })
 
-export default connect(mapStateToProps, {getTableauDasboard, handleError, getBusinessStratTime, getTableauToken, onLoadURL,handleDashboardUpdate})(HomeScreen);
+export default connect(mapStateToProps, {getTableauDashboard, handleError, getBusinessStartTime, getTableauToken, onLoadURL,handleDashboardUpdate})(HomeScreen);
