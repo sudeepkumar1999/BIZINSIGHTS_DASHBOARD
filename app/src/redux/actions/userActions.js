@@ -32,21 +32,21 @@ export function intialSetUp( deviceGUID, clientDTO, gatewayURL)
 export function authenticateUser(loginId, password) {
   
     return (dispatch,getState)=>{
-      console.log("authenicate user" );
+     
     
         let data={
             LoginId: loginId,
             Password: password
         }
-        console.log("data"+ data)
+        
         dispatch({ type: types.AUTHENTICATE_CLIENT_DETAILS_REQUEST });
         ServiceHandler.post({
-            url: "api/Login/AuthenticateUsers",
+            url: Constants.USER_LOGIN,
             data,
             timeout: ParafaitServer.DEFAULT_TIMEOUT
           })
             .then((response) => {
-              console.log("Authenticate user *** " , JSON.stringify(response.data.userDTO))
+              
               try {
                 if (response instanceof Error) throw response;
                 if (response.statusCode === 200) {
@@ -58,8 +58,10 @@ export function authenticateUser(loginId, password) {
                     type:types.SET_LOGIN_ID, payload: response.data.userDTO.LoginId
                   });
                   asyncStorageHandler.setItem(Constants.SET_USER_ID,response.data.userDTO.LoginId)
-
-                  dispatch(getSalesDashboard())
+                   
+                   
+                   dispatch(getBusinessStartTime(false))
+                   dispatch(getSalesDashboard())
                   dispatch(getClientApp(loginId, password,response.data?.userDTO?.UserId , response.data?.userDTO?.SiteId));
 
                   asyncStorageHandler.setItem(Constants.USER_NAME,response.data.userDTO.UserName)
@@ -74,13 +76,13 @@ export function authenticateUser(loginId, password) {
                 }
             }
                 catch (error) {
-                  console.log( "user fail" + error);
+                 
                   //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.BAD_REQUEST})
                     dispatch({ type: types.AUTHENTICATE_CLIENT_DETAILS_FAILURE, payload: error });
                 }
             })
             .catch((error) => {
-                console.log(" api hit error service CLIENTAPP" + error )
+                
                 //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
                 dispatch({ type: types.AUTHENTICATE_CLIENT_DETAILS_FAILURE, payload: error });
             });
@@ -90,13 +92,13 @@ export function authenticateUser(loginId, password) {
 
     export function getClientApp(loginId,password,userId, siteId)
     {
-      console.log("client app response");
+      
       return (dispatch,getState)=>
       {
         dispatch({type:types.FETCH_CLIENT_APP_DETAILS_REQUEST})
-        ServiceHandler.get({ url: "api/ClientApp/ClientApps", data: { queryParameters: { appId: Constants.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+        ServiceHandler.get({ url: Constants.CLIENT_APPS, data: { queryParameters: { appId: Constants.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         .then(response => {
-            console.log("client app  response " + response.data);
+          
             try {
                 if (response instanceof Error)
                     throw response;
@@ -113,12 +115,12 @@ export function authenticateUser(loginId, password) {
                     dispatch({ type: types.FETCH_CLIENT_APP_DETAILS_FAILURE, payload: new Error(response?.data || Constants.UNKNOWN_ERROR_MESSAGE ) });
             }}
             catch (error) {
-                  console.log("clientapp response fail"+ error)
+                  
                 dispatch({ type: types.FETCH_CLIENT_APP_DETAILS_FAILURE, payload: error });
             }
         })
         .catch((error) => {
-            console.log("error clientapp" + error)
+           
            // dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
             dispatch({ type: types.FETCH_CLIENT_APP_DETAILS_FAILURE, payload: error });
         });
@@ -151,7 +153,7 @@ export function authenticateUser(loginId, password) {
       return (dispatch,getState)=>{
         dispatch({type:types.REGISTER_CLIENT_DETAILS_REQUEST})
         ServiceHandler.post({
-          url: "api/ClientApp/ClientAppUser/Register",
+          url: Constants.USER_REGISTER,
           data,
           timeout: ParafaitServer.DEFAULT_TIMEOUT
         })
@@ -176,12 +178,12 @@ export function authenticateUser(loginId, password) {
               }
           }
               catch (error) {
-                console.log( "user register fail" + error);
+                
                   dispatch({ type: types.REGISTER_CLIENT_DETAILS_FAILURE, payload: error });
               }
           })
           .catch((error) => {
-              console.log("error register CLIENTAPP" + error)
+             
               //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
 
               dispatch({ type: types.REGISTER_CLIENT_DETAILS_FAILURE, payload: error });
@@ -194,20 +196,20 @@ export function authenticateUser(loginId, password) {
     export function loginUser(loginId, password)
     {
       let val=store.getState().user.clientAppUserDTO
-      console.log("client app user"+val )
+   
       return (dispatch,getState)=>{
       dispatch({type:types.LOGIN_CLIENT_DETAILS_REQUEST})
       ServiceHandler.post({
-        url: "api/ClientApp/ClientAppUser/Login",
+        url: Constants.LOGIN_USER,
         data:store.getState().user.clientAppUserDTO,
         timeout: ParafaitServer.DEFAULT_TIMEOUT
       })
         .then((response) => {
-          console.log("user login response" + response)
+         
           try {
             if (response instanceof Error) throw response;
             if (response.statusCode === 200) {
-              console.log("login success"+ response.data.DeviceGuid);
+             
               dispatch({
                 type: types.LOGIN_CLIENT_DETAILS_SUCCESS,
                 payload: response.data
@@ -249,7 +251,7 @@ export function authenticateUser(loginId, password) {
               //console.log("dartfctfcyfcyfcyfciyf ug lug lug luh g" +checked)
               })
               .catch((error) => {
-                  console.log( 'errouy' + error);
+                  
                   })
 
               // asyncStorageHandler.setItem(Constants.USER_ID, loginId)
@@ -271,12 +273,12 @@ export function authenticateUser(loginId, password) {
             }
         }
             catch (error) {
-              console.log( "user login fail" + error);
+          
                 dispatch({ type: types.LOGIN_CLIENT_DETAILS_FAILURE, payload: error });
             }
         })
         .catch((error) => {
-            console.log("error  login " + error)
+           
             //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
 
             dispatch({ type: types.LOGIN_CLIENT_DETAILS_FAILURE, payload: error });
@@ -287,7 +289,7 @@ export function authenticateUser(loginId, password) {
     export function signoutUser() {
 
       let val=store.getState().user.clientAppUserDTO
-      console.log("client app user"+val )
+      
       return (dispatch,getState)=>{
       dispatch({type:types.SIGN_OUT_USER_REQUEST})
       ServiceHandler.post({
@@ -296,7 +298,7 @@ export function authenticateUser(loginId, password) {
         timeout: ParafaitServer.DEFAULT_TIMEOUT
       })
         .then((response) => {
-          console.log("user login response" + response)
+          
           try {
             if (response instanceof Error) throw response;
             if (response.statusCode === 200) {
@@ -329,7 +331,7 @@ export function authenticateUser(loginId, password) {
             }
         }
             catch (error) {
-              console.log( "user login fail" + error);
+              
                 dispatch({ type: types.SIGN_OUT_USER_FAILURE, payload: error });
             }
         })
@@ -357,11 +359,11 @@ export function authenticateUser(loginId, password) {
           timeout: ParafaitServer.DEFAULT_TIMEOUT
         })
           .then((response) => {
-            console.log("user login response" + response)
+           
             try {
               if (response instanceof Error) throw response;
               if (response.statusCode === 200) {
-                console.log("sign out success"+ response.data);
+                
                 dispatch({
                   type: types.SIGN_OUT_USER_SUCESS
                  
@@ -388,13 +390,13 @@ export function authenticateUser(loginId, password) {
               }
           }
               catch (error) {
-                console.log( "user login fail" + error);
+                
                  
                   dispatch({ type: types.SIGN_OUT_USER_FAILURE, payload: error });
               }
           })
           .catch((error) => {
-              console.log("error  login " + error)
+             
               //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
               dispatch({ type: types.SIGN_OUT_USER_FAILURE, payload: error });
   

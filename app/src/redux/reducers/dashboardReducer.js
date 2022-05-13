@@ -9,7 +9,15 @@ let initialState = {
     webURL:null,
     currentReportId:null,
     currentdbQuery:null,
-    updateDashboard:false
+    updateDashboard:false,
+    totalCollection:{},
+    siteCollection:[],
+    siteList:[],
+    currentDate:new Date().toString()
+
+
+
+
 }
 
 export const dashboard = (state = initialState, action) => {
@@ -60,7 +68,7 @@ export const dashboard = (state = initialState, action) => {
                                         
                                 }
             case types.STORE_REPORT_ID:
-              
+                        console.log("report id",action.payload)
                     return {
                              ...state,
                              currentReportId:action.payload
@@ -79,6 +87,19 @@ export const dashboard = (state = initialState, action) => {
              
                 return {
                     ...state, updateDashboard:action.payload
+                }
+            case types.FETCH_TOTAL_COLLECTION:
+                
+                return {
+                    ...state, totalCollection:action.payload
+                }
+            case types.FETCH_SALES_DASHBOARD_SUCCESS:
+                return {
+                    ...state, siteList:action.payload
+                }
+            case types.FETCH_CURRENT_DATE:
+                return {
+                    ...state, currentDate:action.payload
                 }
                 
                    

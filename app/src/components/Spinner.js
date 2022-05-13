@@ -4,7 +4,7 @@ import * as GenericMethods from '../common/index'
 var {vw, vh, vmin, vmax} = require('react-native-viewport-units');
 
 const Spinner=({loading})=>{
-const onModalBack = () => { console.log("From Modal") }
+const onModalBack = () => {  }
     return(
 
 

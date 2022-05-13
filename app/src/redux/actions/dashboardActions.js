@@ -5,14 +5,19 @@ import  AsyncStorageHandler from '../../services/AsyncStorageHanlder'
 import { ParafaitServer } from '../../constants/ParafaitServer'
 import { store } from '../../../index'
 import {fetchBusinessDate} from '../../utilitis'
+import DashboardDTo from '../../models/DashboardReportDTO'
+import WeeklyCollectionReportDTO from '../../models/WeeklyCollectionReport'
 var TOTAL_COLLECTION_SITE_ID="9999"
 var asyncStorageHandler=new AsyncStorageHandler();
 
     export const getSalesDashboard=()=>{
         return (dispatch, getState)=>{
             dispatch({type:types.FETCH_SALES_DASHBOARD_REQUEST})
-            ServiceHandler.get({ url: "api/Report/SalesDashboard", data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+            
+            ServiceHandler.get({ url: Constants.SALES_DASHBOARD, data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
             .then(response => {
+
+                
              
                 try {
                     if (response instanceof Error)
@@ -20,11 +25,12 @@ var asyncStorageHandler=new AsyncStorageHandler();
                     if (response.statusCode === 200  ) 
                     {
                       
-
+                        
+                       const  currentDate=response?.data?.CurrentDate
                        const  siteCollectionList=response?.data?.SiteCollectionList
                      
                       
-                       var  sitList=[]
+                       var  siteList=[]
                        var totalCollection={}
                        
 
@@ -32,16 +38,23 @@ var asyncStorageHandler=new AsyncStorageHandler();
                         {
                            siteCollectionList.forEach((element, index, array) => {
                                
-                               if(element.hasOwnProperty("WeeklyCollectionPOS")&& Array.isArray(element.WeeklyCollectionPOS)&&element.WeeklyCollectionPOS.length)
+                               if(element.hasOwnProperty("WeeklyCollectionPOS") )
                                {
                                 let posCollections=[];
-                                
-                                element.WeeklyCollectionPOS.forEach((ele, index,array)=>
+                            
+                                if(Array.isArray(element.WeeklyCollectionPOS)&&element.WeeklyCollectionPOS.length)
                                 {
-                                 
-                                    posCollections.push(ele)
+                                    element.WeeklyCollectionPOS.forEach((ele, index,array)=>
+                                    {
+                                    
+                                        posCollections.push(ele)
 
-                                })
+                                    })
+
+                                }
+                               
+                                
+                                    
 
                                
                             
@@ -58,24 +71,23 @@ var asyncStorageHandler=new AsyncStorageHandler();
                                 GamePlayWeek,
                                 GamePlayPreviousWeek
                                }=element
-                            let sitCollection={
-                                SiteId,
-                                SiteName,
-                                CollectionToday,
-                                CollectionPreviousDay,
-                                CollectionWeek,
-                                GamePlayToday,
-                                GamePlayPreviousDay,
-                                GamePlayWeek,
-                                GamePlayPreviousWeek,
-                                PosCollections:posCollections
-                                
 
-                            }
+                            element.posCollection=posCollections;
+                            // console.log("pos collections", JSON.stringify(posCollections))
+                            //console.log("pos collection *** ",JSON.stringify(element))
+                            let sitCollection=new WeeklyCollectionReportDTO(element);
+
+                           
                             if(sitCollection.SiteId!=TOTAL_COLLECTION_SITE_ID)
-                                sitList.push(sitCollection)
+                            {
+                                siteList.push(sitCollection)
+                            }
                             else
-                                totalCollection=sitCollection;
+                            {
+                                totalCollection=sitCollection
+                                dispatch({type:types.FETCH_CURRENT_DATE, payload:currentDate})
+                                dispatch({type:types.FETCH_TOTAL_COLLECTION , payload:totalCollection})
+                            }
 
                                }
                               
@@ -87,9 +99,13 @@ var asyncStorageHandler=new AsyncStorageHandler();
 
                         }
 
+
                   
+                        
     
-                        dispatch({ type: types.FETCH_SALES_DASHBOARD_SUCCESS, payload:response.data[0]?.DefaultValue??6});
+                        dispatch({ type: types.FETCH_SALES_DASHBOARD_SUCCESS, payload:siteList});
+
+                        
                       
                         
                           
@@ -127,7 +143,7 @@ var asyncStorageHandler=new AsyncStorageHandler();
         return (dispatch,getState)=>{
         
             if(showLoader) dispatch({ type: types.FETCH_START_TIME_REQUEST });
-            ServiceHandler.get({ url: "api/Configuration/ParafaitDefaults", data: { queryParameters: { defaultValueName:Constants.BUSINESS_DAY_START_TIME, isActive:Constants.isActive   } }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+            ServiceHandler.get({ url:Constants.PARAFAIT_DEFAULTS , data: { queryParameters: { defaultValueName:Constants.BUSINESS_DAY_START_TIME, isActive:Constants.isActive   } }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
             .then(response => {
                 try {
                     if (response instanceof Error)
@@ -167,7 +183,7 @@ var asyncStorageHandler=new AsyncStorageHandler();
                 }
             })
             .catch((error) => {
-                console.log(" buisness error" + error)
+               
                 dispatch({ type: types.FETCH_START_TIME_FAILURE, payload: null });
                 dispatch(getTableauDashboard(showLoader))
             });
@@ -181,21 +197,26 @@ export const getTableauDashboard=(showLoader=true)=>
     return (dispatch,getState)=>{
         
         if(showLoader) dispatch({ type: types.FETCH_DASHBOARD_DETAILS_REQUEST });
-        ServiceHandler.get({ url: "api/Report/TableauDashboards", data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+        ServiceHandler.get({ url:Constants.TABLEU_DASHBOARD , data: {  }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         .then(response => {
+           
            
             try {
                 if (response instanceof Error)
                     throw response;
                 if (response.statusCode === 200) 
                 {
-                    console.log("dashboard details ", JSON.stringify(response) )
+                  
+
+            
+                  
+                    
 
                 
                 if(!Object.keys(response.data).length){
                  
                     
-
+                
                     dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.USER_DEFINED_ALERT})
 
                     if(!showLoader) throw new Error(Constants.UPDATE_DASHBOARD_ERROR)
@@ -210,23 +231,25 @@ export const getTableauDashboard=(showLoader=true)=>
                 else
                 {
                     
+                   
                     
+                    const dashboardResponse = response.data.map((data)=> new DashboardDTo(data))
+
+                    dashboardResponse.unshift(new DashboardDTo({ReportId:-1, ReportName:"Home", DBQuery:null}))
                     
+                    dispatch(setDashBoardToStore(dashboardResponse))
                     
-                    
-                    dispatch(setDashBoardToStore(response))
-                    
-                    if((!showLoader)&&(!checkDashboardEqual(response.data,store.getState().dashboard.dashboardDTO))) 
-                    {
+                    // if((!showLoader)&&(!checkDashboardEqual(response.data,store.getState().dashboard.dashboardDTO))) 
+                    // {
                        
-                        dispatch(handleDashboardUpdate(true))
-                    }
+                    //     dispatch(handleDashboardUpdate(true))
+                    // }
                 
                
                     
                    
-                    if(showLoader)
-                        dispatch(getTableauToken( response.data[0].ReportId, response.data[0].DBQuery));
+                    // if(showLoader)
+                    //     dispatch(getTableauToken( response.data[0].ReportId, response.data[0].DBQuery));
                      
                     
                 }
@@ -248,7 +271,7 @@ export const getTableauDashboard=(showLoader=true)=>
             }
         })
         .catch((error) => {
-            console.log("error" + error)
+           
        
 
         if(showLoader)
@@ -279,12 +302,13 @@ export const getTableauDashboard=(showLoader=true)=>
             dispatch({type: types.STORE_REPORT_ID, payload:reportId});
             dispatch({type: types.STORE_DB_QUERY, payload:dbQuery});
             ServiceHandler.get(
-                { url: "api/Report/TableauDashboards/Token", 
+                { url: Constants.DASHBOARD_TOKEN, 
                    data:{ queryParameters: {reportId:reportId, deviceGuid: store.getState().user.deviceGUID }},
                    timeout: ParafaitServer.DEFAULT_TIMEOUT
                  }
                )
             .then(response => {
+                console.log("fetch token success")
                 try {
                     if (response instanceof Error)
                         throw response;
@@ -293,7 +317,7 @@ export const getTableauDashboard=(showLoader=true)=>
 
                         let token=response?.data?.data||response?.data
                         
-                        console.log("token sucess " + response.data );
+                        
 
                         dispatch({ type: types.FETCH_TOKEN_SUCCESS, payload:response.data});
                         dispatch(setURL(token, dbQuery));
@@ -359,15 +383,15 @@ export function onLoadURL()
 
 export function setDashBoardToStore(response)
 {
+    
     return (dispatch)=>
     {
-                    response.data.sort((a,b)=>a.ReportId-b.ReportId)
-                    dispatch({type:types.SET_DB_QUERY, payload: response.data[0].DBQuery});
-                    dispatch({type:types.SET_REPORT_ID, payload:response.data[0].ReportId});
-                    dispatch({type:types.SET_REPORT_NAME, payload:response.data[0].ReportName});
-                    dispatch({ type: types.FETCH_DASHBOARD_DETAILS_SUCCESS, payload:response.data}); 
-                    // dispatch(getTableauToken( response.data[0].ReportId, response.data[0].DBQuery));
-                    asyncStorageHandler.setItem(Constants.SET_DASHBOARD,JSON.stringify(response.data));
+                    response.sort((a,b)=>a.ReportId-b.ReportId)
+                    dispatch({type:types.SET_DB_QUERY, payload: response[0].DBQuery});
+                    dispatch({type:types.SET_REPORT_ID, payload:response[0].ReportId});
+                    dispatch({type:types.SET_REPORT_NAME, payload:response[0].ReportName});
+                    dispatch({ type: types.FETCH_DASHBOARD_DETAILS_SUCCESS, payload:response}); 
+                   
 
     }
 }

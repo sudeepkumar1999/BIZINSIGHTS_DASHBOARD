@@ -232,7 +232,7 @@ var asyncStorageHandler=new AsyncStorageHanlder();
         
      }
      else{
-         console.log("go to regesration")
+         
          this.gotoRegestrationScreen()
      }
 

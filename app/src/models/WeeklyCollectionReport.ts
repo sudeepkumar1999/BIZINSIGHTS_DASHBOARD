@@ -1,31 +1,32 @@
-export class WeeklyCollectionReportDTO {
+import  PosDailyCollectionDTO from './PosDaillyCollectionDTO'
+import PosWeeklyCollectionDTO from './PosDaillyCollectionDTO'
+
+export  default class WeeklyCollectionReportDTO {
   
 
    
     SiteId:number;
     SiteName:string;
-    CollectionToday:number;
-    CollectionPreviousDay:number;
-    CollectionWeek:number;
-    GamePlayToday:number;
-    GamePlayPreviousDay:number;
-    GamePlayWeek:number;
-    GamePlayPreviousWeek:number;
-    posCollection:any;
+    PresentCollection:number;
+    PastCollection:number;
+    PresentConsumption:number;
+    PastConsumption:number;
+    PosCollection:any;
 
 
 
     constructor(data: any) {
        this.SiteId=data.SiteId,
        this.SiteName=data.SiteName
-       this.CollectionToday=data.CollectionToday;
-       this.CollectionPreviousDay=data.CollectionPreviousD;
-       this.CollectionWeek=data.CollectionWeek;
-       this.GamePlayToday=data.GamePlayToday;
-       this.GamePlayPreviousDay=data.GamePlayPreviousDay;
-       this.GamePlayWeek=data.GamePlayWeek;
-       this.GamePlayPreviousWeek=data.GamePlayPreviousWeek;
-       this.posCollection=data.posCollection;
+       this.PresentCollection=data.CollectionWeek;
+       this.PastCollection=data.CollectionPreviousWeek
+       this.PresentConsumption=data.GamePlayWeek;
+       this.PastConsumption=data.GamePlayPreviousWeek;
+       this.PosCollection=data.posCollection.length>0? data.posCollection.map((ele)=>new  PosWeeklyCollectionDTO(ele)):[];
+       
 
     }
 }
+
+
+

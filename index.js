@@ -56,7 +56,7 @@ commander.parse(process.argv);
     .map(dirent => dirent.name)
  
 
-    console.log(getDirectories)
+ 
   
 
 
@@ -75,7 +75,7 @@ commander.parse(process.argv);
     }
 
     for(const client of getDirectories){
-      console.log("for loop executed  ##############")
+      // console.log("for loop executed  ##############")
 
   
     const parafaitConfigPath = `./assets/${client}/parafait.config.json`;

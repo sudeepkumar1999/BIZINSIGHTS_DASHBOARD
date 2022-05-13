@@ -85,7 +85,7 @@ class RegestrationScreen extends Component
 
      onSelectCheckbox=()=>
     {
-        console.log("check box" + this.state);
+      
         
          this.setState(
          {
@@ -314,10 +314,9 @@ class RegestrationScreen extends Component
        )
       })
       .catch((error) => {
-          console.log( 'errouy' + error);
+          
           }))
       .catch((error) => {
-      console.log( 'errouy' + error);
       })
   })
   
@@ -415,8 +414,8 @@ const styles=StyleSheet.create(
 )
 
 const mapStateToProps = (state) => {
-    console.log("state"+state.client.clientGateway
-    )
+   
+    
     
     
 

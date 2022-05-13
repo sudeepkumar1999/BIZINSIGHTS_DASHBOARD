@@ -7,6 +7,7 @@ import { ParafaitServer } from '../../constants/ParafaitServer'
 import {generateDate,generateHashCode} from '../../utilitis'
 import NavigationService from '../../lib/NavigationService';
 import * as types from './types'
+// import * as Constants from '../../constants'
 
 export const   updateRequired =(deprecated)=>
 {
@@ -33,7 +34,7 @@ export const checkForUpdate=async(securitycode)=>
    
         
      const  response =  await ServiceHandler.post({
-            url: "api/ClientApp/ClientAppVersion",
+            url: Constants.CLIENT_APP_VERSION,
             headers: { queryParameters: { appId: Constants.APP_ID, buildNumber : Constants.PACKAGE_VERSION,  generatedTime:currentTime, securityCode:securityCode} },
             data:{codeHash:hashedVal},
             timeout: ParafaitServer.DEFAULT_TIMEOUT
@@ -67,14 +68,14 @@ export const checkForUpdate=async(securitycode)=>
       
       
 
-      const response=  await  ServiceHandler.get({ url: "api/ClientApp/ClientApps", data: { queryParameters: { appId: Constants.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+      const response=  await  ServiceHandler.get({ url: Constants.CLIENT_APPS, data: { queryParameters: { appId: Constants.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
        
           if (response?.statusCode==200) 
           {
            
             NavigationService.reset({
               index: 0,
-              actions: [NavigationService.navActions("RegestrationScreen")]
+              actions: [NavigationService.navActions("HomeScreen")]
             })
 
           }
@@ -89,7 +90,7 @@ export const checkForUpdate=async(securitycode)=>
 
       catch(error)
       {
-        console.log("error", error)
+        
 
       }
 

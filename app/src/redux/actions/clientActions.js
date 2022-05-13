@@ -1,12 +1,8 @@
 
 import {Linking, Alert, BackHandler} from 'react-native'
 import * as types from './types'
-//import * as types from './types'
 import ServiceHandler from '../../services/APIHandler'
 import * as Constants from '../../constants'
-//import * as GenericMethods from '../../common'
-//import { ClientDTO } from '../lib/model/ClientDTO'
-//import PackageJson from '../../../package.json'
 import  AsyncStorageHanlder from '../../services/AsyncStorageHanlder'
 import {ClientAppVersionMappingDTO} from '../../models/clientDTO'
 import { ParafaitServer } from '../../constants/ParafaitServer'
@@ -35,7 +31,7 @@ export const getClientDetail=(userId, password, securitycode)=>
         //console.log("app id \n version \n securityCode\n  currentTime \n",Constants.APP_ID, Constants.PACKAGE_VERSION, securitycode, currenntTime)
         //ServiceHandler.get({ url: "/api/ClientApp/ClientAppVersion", data: { queryParameters: { appId: Constants.APP_ID, buildNumber : Constants.PACKAGE_VERSION, codeHash:hashedVal, generatedTime:currenntTime} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         ServiceHandler.post({
-            url: "api/ClientApp/ClientAppVersion",
+            url: Constants.CLIENT_APP_VERSION,
             headers: { queryParameters: { appId: Constants.APP_ID, buildNumber : Constants.PACKAGE_VERSION,  generatedTime:currenntTime, securityCode:securityCode} },
             data:{codeHash:hashedVal},
             timeout: ParafaitServer.DEFAULT_TIMEOUT
@@ -64,8 +60,8 @@ export const getClientDetail=(userId, password, securitycode)=>
             }
         })
         .catch((error) => {
-            console.log("error" + error)
-            // dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
+            
+            
             dispatch({ type: types.FETCH_CLIENT_DETAILS_FAILURE, payload: error });
         });
      }
@@ -75,9 +71,7 @@ export const getClientDetail=(userId, password, securitycode)=>
 
 export function setClientData  (clientData,userId, password,securityCode) {
     return (dispatch, getState) => {
-        // console.log("response sucess" +clientData)
-        // console.log("client data url"+ clientData.GateWayURL);
-        // console.log("client data url"+ clientData.Deprecated);
+    
         
        
         
@@ -85,7 +79,7 @@ export function setClientData  (clientData,userId, password,securityCode) {
         asyncStorageHandler.setItem( Constants.CLIENT_DTO, clientData);
         asyncStorageHandler.setItem(Constants.GATEWAY_URL,clientData.GateWayURL );
                                         
-       // console.log("sucess state"+ store.getState())
+
 
         dispatch({ type: types.FETCH_CLIENT_DETAILS_SUCCESS, payload: clientData });
         dispatch({ type: types.SET_CLIENT_GATEWAY, payload: clientData.GateWayURL });

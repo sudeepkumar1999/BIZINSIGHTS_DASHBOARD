@@ -35,7 +35,7 @@ export default class ErrorBoundary extends Component {
             Uuid: store.getState().deviceInfo.uuid || '',
             SiteId: store.getState().site.selectedSite.siteId || -1,
         });
-        console.log(data);
+        
         GenericAsyncMethods.logErrorToServer(data)
             .then(response => {
                 try {

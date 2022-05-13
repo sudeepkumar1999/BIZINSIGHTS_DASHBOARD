@@ -221,7 +221,7 @@ function callRestServices(
   tempParams
 ) {
   console.log("url ***** ",  url);
-  console.log(body)
+  // console.log(body)
   // if (store.getState().customer.isLoggedIn && sendLogs) {
   //   return userlogs(tempParams, host, headers, body, qs, requestTimeout);
   // } else {
@@ -259,7 +259,7 @@ function callRestServices(
         };
       })
       .catch((error) => {
-        console.log("response", error);
+       
         const { request, response } = error;
        
 

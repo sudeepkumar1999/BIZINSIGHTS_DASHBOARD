@@ -150,3 +150,35 @@ export const loginmsg= "Please enter loginId"
 export const  passwordmsg= "Please enter Password"
 export   const verifymsg = " Please enter verificationCode "
 export const DATA_CLEAR_MESSAGE="This action will clear your data"
+export const MSG ="Are you sure you want to go back?"
+
+export const TODAY="Today";
+export const WEEK="Week";
+export const CURRENCY="$";
+export const COLLECTION="Collection";
+export const CONSUMPTION="Consumption";
+export const CURRENT_DAY="TODAY";
+export const YESTERDAY="YESTERDAY";
+export const THIS_WEEK="THIS WEEK";
+export const LAST_WEEK="LAST WEEK";
+
+
+export const CLIENT_APP_VERSION="api/ClientApp/ClientAppVersion";
+
+export const SALES_DASHBOARD="api/Report/SalesDashboard";
+
+export const PARAFAIT_DEFAULTS="api/Configuration/ParafaitDefaults"
+
+export const TABLEU_DASHBOARD="api/Report/TableauDashboards";
+
+export const DASHBOARD_TOKEN="api/Report/TableauDashboards/Token";
+
+export const CLIENT_APPS="api/ClientApp/ClientApps";
+
+export const USER_LOGIN="api/Login/AuthenticateUsers";
+
+export const  USER_REGISTER="api/ClientApp/ClientAppUser/Register";
+
+export const LOGIN_USER="api/ClientApp/ClientAppUser/Login";
+
+ 

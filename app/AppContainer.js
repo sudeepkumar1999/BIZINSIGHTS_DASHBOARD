@@ -10,6 +10,7 @@ import RegestrationScreen from './src/container/RegestrationScreen'
 import NavigationService from "./src/lib/NavigationService"
 import HomeScreen from './src/container/HomeScreen'
 import SplashScreen from './src/container/SplashScreen'
+import DashboardDetailsScreen from './src/container/DashboardDetailsScreen'
 
 const RootStack=createStackNavigator(
   {
@@ -31,10 +32,19 @@ const RootStack=createStackNavigator(
        
       
     },
+
     HomeScreen:{
       screen:HomeScreen,
       
+    },
+
+    DashboardDetailsScreen:{
+      screen:DashboardDetailsScreen
     }
+
+
+
+
     
   }
 );

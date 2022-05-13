@@ -10,7 +10,7 @@ export const generateDate=()=>
     let date= new Date();
     let dateISO = date.toISOString().split('.')[0]+"Z";
     //console.log( now.toISOString().split('.')[0]+"Z" );
-    console.log("date in iso"+ dateISO)
+    
     return dateISO
 }
 
@@ -45,7 +45,7 @@ let businessStartTime=parseInt(store.getState().dashboard.startTime??6);
  if(currTime<businessStartTime) 
  currDate.setDate(currDate.getDate() - 1);
  
- console.log("currant date " + currDate);
+
 
  let formatedDate = moment(currDate).format('YYYY-MM-DD');
  let formatedTime= moment(currDate).format('hh:mm'); // 
