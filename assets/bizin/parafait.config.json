@@ -10,7 +10,7 @@
 	"MYAPP_RELEASE_KEY_ALIAS": "dashboard-key-alias",
 	"MYAPP_RELEASE_STORE_PASSWORD": "dashboard",
 	"MYAPP_RELEASE_KEY_PASSWORD": "dashboard",
-	"VERSION_CODE": 7,
+	"VERSION_CODE": 8,
 	"VERSION_NAME": "1",
 	"PLAY_STORE_URL": "https://play.google.com/store/apps/details?id=my.aeon.smartfun",
 	"APP_STORE_URL": "https://apps.apple.com/app/id1574628712"
