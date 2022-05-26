@@ -1,15 +1,15 @@
 export default class PosWeeklyCollectionDTO {
     PosMachine:              string;
-    CollectionWeek:         number;
-    CollectionPreviousWeek:  number;
-    GamePlayWeek:            number;
-    GamePlayPreviousWeek:    number;
+    PresentPosCollection:         number;
+    PastPosCollection:   number;
+    PresentPosConsumption:           number;
+    PreviousPosConsumption:     number;
     constructor(data:any)
     {
         this.PosMachine=data.PosMachine;
-        this.CollectionWeek=data.CollectionWeek;
-        this.CollectionPreviousWeek=data.CollectionPreviousWeek;
-        this.GamePlayWeek=data.GamePlayWeek;
-        this.GamePlayPreviousWeek=data.GamePlayPreviousWeek;
+        this.PresentPosCollection=data.CollectionWeek;
+        this.PastPosCollection=data.CollectionPreviousWeek;
+        this.PresentPosConsumption=data.GamePlayWeek;
+        this.PreviousPosConsumption=data.GamePlayPreviousWeek;
     }
 }

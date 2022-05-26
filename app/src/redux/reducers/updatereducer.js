@@ -1,10 +1,9 @@
-import * as types from "../actions/types";
+import * as types from '../actions/types';
 
 let initialState = {
-  userName:null,
-  password:null,
-  securityCode:'ABCE1235'
-  
+  userName: null,
+  password: null,
+  securityCode: 'ABCE1235',
 };
 
 export const update = (state = initialState, action) => {
@@ -12,15 +11,14 @@ export const update = (state = initialState, action) => {
     case types.SET_USER_ID:
       return {
         ...state,
-        userName:action.payload
+        userName: action.payload,
       };
     case types.SET_USER_PASSWORD:
       return {
         ...state,
-        password: action.payload
+        password: action.payload,
       };
-  
-    
+
     default:
       return state;
   }

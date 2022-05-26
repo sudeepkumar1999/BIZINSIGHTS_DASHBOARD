@@ -1,5 +1,5 @@
-import  PosDailyCollectionDTO from './PosDaillyCollectionDTO'
-import PosWeeklyCollectionDTO from './PosDaillyCollectionDTO'
+
+import PosWeeklyCollectionDTO from './PosWeeklyCollectionDTO'
 
 export  default class WeeklyCollectionReportDTO {
   
@@ -11,7 +11,7 @@ export  default class WeeklyCollectionReportDTO {
     PastCollection:number;
     PresentConsumption:number;
     PastConsumption:number;
-    PosCollection:any;
+    PosCollections:any;
 
 
 
@@ -22,7 +22,7 @@ export  default class WeeklyCollectionReportDTO {
        this.PastCollection=data.CollectionPreviousWeek
        this.PresentConsumption=data.GamePlayWeek;
        this.PastConsumption=data.GamePlayPreviousWeek;
-       this.PosCollection=data.posCollection.length>0? data.posCollection.map((ele)=>new  PosWeeklyCollectionDTO(ele)):[];
+       this.PosCollections=data.posCollection.length>0? data.posCollection.map((ele)=>new  PosWeeklyCollectionDTO(ele)):[];
        
 
     }

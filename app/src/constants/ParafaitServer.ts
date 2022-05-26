@@ -37,7 +37,7 @@ export class ParafaitServer {
     public static readonly ERROR_TYPES = ERROR_TYPES;
 
     //production
-    public static readonly PUBLIC_SERVER_IP_PRODUCTION = 'https://parafaitios.parafait.com' // "https://smartfunapp.parafait.com"  //   //'https://parafaitdevcentral.parafait.com'  //"https://smartfunapp.parafait.com";
+    public static readonly PUBLIC_SERVER_IP_PRODUCTION =  'https://parafaitios.parafait.com' //'https://dashboardtestwebapi.parafait.com' // "https://smartfunapp.parafait.com"  //   //'https://parafaitdevcentral.parafait.com'  //"https://smartfunapp.parafait.com";
 
     //aws
    public static readonly PUBLIC_SERVER_IP_LOCAL = 'https://parafaitdevcentral.parafait.com';

@@ -132,8 +132,8 @@ android {
         applicationId  "com.semnox.analyticsdashboardapp"  //"com.dashboard" "com.semnoxsolutions.dashboard"   //
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1"
+        versionCode 26
+        versionName "2.110.7"
     }
     splits {
         abi {

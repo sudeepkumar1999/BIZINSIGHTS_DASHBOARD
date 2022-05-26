@@ -60,8 +60,8 @@ export function authenticateUser(loginId, password) {
                   asyncStorageHandler.setItem(Constants.SET_USER_ID,response.data.userDTO.LoginId)
                    
                    
-                   dispatch(getBusinessStartTime(false))
-                   dispatch(getSalesDashboard())
+                  //  dispatch(getBusinessStartTime(false))
+                  //  dispatch(getSalesDashboard())
                   dispatch(getClientApp(loginId, password,response.data?.userDTO?.UserId , response.data?.userDTO?.SiteId));
 
                   asyncStorageHandler.setItem(Constants.USER_NAME,response.data.userDTO.UserName)

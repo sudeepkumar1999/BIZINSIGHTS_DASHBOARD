@@ -7,7 +7,7 @@ export const APP_IDENTIFIER = "Insight Analytics";
 export const PACKAGE_VERSION= "2.140.1"//"2.110.0";
 export const CURRENT_VERSION="2.110.5";
 
-export const APP_ID = "com.semnox.analyticsdashboardapp"  // "com.semnox.analyticsdashboardapp"
+export const APP_ID ="com.semnox.analyticsdashboardapp"  // "com.semnox.analyticsdashboardapp"
 // export const APP_VERSION="V_2.110.5"
 
 

@@ -18,18 +18,23 @@ const msg= "This action will clear your data"
 const HeaderTitle=()=>
  {
    return  (
-    <View  style={{ width:75*vw,flex:1, justifyContent:'center', alignItems:'flex-start', padding:2}}>
+    // <View  style={{ width:75*vw,flex:1, justifyContent:'center', backgroundColor:'red', alignItems:'flex-start', padding:2}}>
+    <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center', }}>
     <Image
-    source={require('../assets/image/BIZINSIGHTS_Header_Logo.png')}
+    source={require('../assets/data/image/BIZINSIGHTS_Header_Logo.png')}
     resizeMode="contain"
-    style={{ width:'90%' , flex:1}}
+    //style={{ width:'90%' , flex:1}}
+    style={{ width: 250,  height:50, }}
     
     >
+  
 
     </Image>
+    <Text style={{  textAlign:'justify', alignSelf:'center', fontSize:16,fontWeight:'bold'}}>{" "}2.110.7</Text>
+    </View>
     
          
-               </View>
+              //  </View>
    )
    
   //  <Text style={{ fontSize:2.5*vh, fontWeight:'500' ,color:'white'}}>{Constants.APP_IDENTIFIER}</Text>

@@ -261,6 +261,8 @@ function callRestServices(
       .catch((error) => {
        
         const { request, response } = error;
+
+        console.log("reesponse", response)
        
 
         store.dispatch(setErrorType(response?.status||503));

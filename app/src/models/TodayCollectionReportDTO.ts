@@ -10,7 +10,7 @@ export  default class TodayCollectionReportDTO{
     PastCollection:number;
     PresentConsumption:number;
     PastConsumption:number;
-    PosCollection:any;
+    PosCollections:any;
     
 
 
@@ -22,7 +22,7 @@ export  default class TodayCollectionReportDTO{
        this.PastCollection=data.CollectionPreviousDay;
        this.PresentConsumption=data.GamePlayToday;
        this.PastConsumption=data.GamePlayPreviousDay;
-       this.PosCollection=data.posCollection.length>0? data.posCollection.map((ele)=>new  PosDailyCollectionDTO(ele)):[];
+       this.PosCollections=data.posCollection.length>0? data.posCollection.map((ele)=>new  PosDailyCollectionDTO(ele)):[];
        
 
     }
