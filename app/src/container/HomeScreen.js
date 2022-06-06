@@ -215,6 +215,53 @@ class HomeScreen extends Component {
      
     }
 
+    if(response?.data?.Deprecated=='M')
+    {
+
+     Alert.alert(
+         "Please Update",
+         "You will have to update your app to latest version to continue using.",
+         [
+           
+           { text: "Ok", onPress: () => {
+               BackHandler.exitApp();
+               this.handleUpdate()
+
+           } }
+         ],
+         { cancelable: false }
+       )
+     }
+
+  
+  if(response.data?.Deprecated=='O')
+  {
+     Alert.alert(
+         "Please Update",
+         "New version of the app is available. Do you want to update?",
+         [
+           {
+             text: "Later",
+             onPress: () =>
+             { 
+               console.log("Cancel Pressed")
+               this.state.update=false
+           }
+             
+           },
+           { text: "Ok", onPress: ()=>
+         {
+             BackHandler.exitApp();
+             //Linking.openURL('https://play.google.com/store/apps/details?id=com.parafait.dashboardapp')
+             this.handleUpdate()
+             
+
+         } }
+         ],
+         { cancelable: false }
+       )
+  }
+
     BackHandler.addEventListener('hardwareBackPress', this.backAction);
   }
 
