@@ -234,7 +234,7 @@ class HomeScreen extends Component {
      }
 
   
-  if(response.data?.Deprecated=='O')
+  else if(response.data?.Deprecated=='O')
   {
      Alert.alert(
          "Please Update",
