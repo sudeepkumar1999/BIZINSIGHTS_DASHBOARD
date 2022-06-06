@@ -150,8 +150,9 @@ commander.parse(process.argv);
       /(versionName ").+/g,
       `versionName "${parafaitConfigObj.VERSION_NAME}"`
     );
+    console.log("build grdlae data ", )
     fs.writeFileSync(buildGradlePath, buildGradleData, "utf8");
-    console.log("app/build.gradle Updated");
+   
 
     //Moving release google-services.jsom file
     // const googleServicesFilePath = `./assets/${client}/android/google-services.json`;

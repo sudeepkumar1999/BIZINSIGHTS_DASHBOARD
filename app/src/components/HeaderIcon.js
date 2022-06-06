@@ -10,6 +10,8 @@ import * as types from '../redux/actions/types'
 import { useDispatch } from 'react-redux'
 import {signoutUser , signoutAllUser} from '../redux/actions/userActions'
 import * as  Constants from '../constants'
+import {config} from '../constants/parafaitConfig';
+
 
 
 const msg= "This action will clear your data"
@@ -30,7 +32,7 @@ const HeaderTitle=()=>
   
 
     </Image>
-    <Text style={{  textAlign:'justify', alignSelf:'center', fontSize:16,fontWeight:'bold'}}>{" "}2.110.7</Text>
+    <Text style={{  textAlign:'justify', alignSelf:'center', fontSize:16,fontWeight:'bold'}}>{" "}{config.VERSION_NAME}</Text>
     </View>
     
          

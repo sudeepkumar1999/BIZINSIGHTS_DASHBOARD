@@ -156,6 +156,7 @@ export const getTableauDashboard = (showLoader = true) => {
       timeout: ParafaitServer.DEFAULT_TIMEOUT,
     })
       .then((response) => {
+       
         try {
           if (response instanceof Error) throw response;
           if (response.statusCode === 200) {
@@ -260,7 +261,7 @@ export function setUrlTelerik(dbQuery) {
 
     let reportURL = dbQuery;
 
-    console.log('url', reportURL);
+    console.log('telrik ******', reportURL);
     reportURL = reportURL.replace('@User', loginId);
     reportURL = reportURL.replace('@Date', formatedDate);
     reportURL = reportURL.replace('@Time', formatedTime);
@@ -330,20 +331,20 @@ export function objectsEqual(o1, o2) {
 }
 
 export function asyncRequest() {
-  return ({
-      type: types.ASYNC_REQUEST,
-  });
+  return {
+    type: types.ASYNC_REQUEST,
+  };
 }
 
 export function asyncSuccess() {
-  return ({
-      type: types.ASYNC_SUCCESS,
-  });
+  return {
+    type: types.ASYNC_SUCCESS,
+  };
 }
 
 export function asyncFailure(error) {
-  return ({
-      type: types.ASYNC_FAILURE,
-      payload: error,
-  });
+  return {
+    type: types.ASYNC_FAILURE,
+    payload: error,
+  };
 }

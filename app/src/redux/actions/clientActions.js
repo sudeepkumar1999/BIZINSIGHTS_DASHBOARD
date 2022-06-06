@@ -14,15 +14,16 @@ var asyncStorageHandler = new AsyncStorageHanlder();
 export const getClientDetail = (userId, password, securitycode) => {
   return (dispatch, getState) => {
     var securityCode = securitycode.slice(-2);
+    const appId = config.APP_ID;
+    const releaseNumber = config.VERSION;
 
     const currenntTime = generateDate();
     const hashedVal = generateHashCode(
-      config.APP_ID,
+      appId,
       securitycode,
       currenntTime,
     );
-    const appId = config.APP_ID;
-    const releaseNumber = config.VERSION;
+   
 
     dispatch({type: types.FETCH_CLIENT_DETAILS_REQUEST});
 
@@ -30,7 +31,7 @@ export const getClientDetail = (userId, password, securitycode) => {
       url: Constants.CLIENT_APP_VERSION,
       headers: {
         queryParameters: {
-          appId: Constants.APP_ID,
+          appId: appId,
           buildNumber: releaseNumber,
           generatedTime: currenntTime,
           securityCode: securityCode,
