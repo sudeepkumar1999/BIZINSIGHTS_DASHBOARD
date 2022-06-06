@@ -101,6 +101,27 @@ class HomeScreen extends Component {
     }
   };
 
+  
+  handleUpdate=()=>
+  {
+
+     if (Platform.OS === "android") {
+         Linking.canOpenURL(playStoreURL)
+           .then(() => {
+             Linking.openURL(playStoreURL);
+           })
+           .catch();
+       // Redirect Apple store
+       } else if (Platform.OS === "ios") {
+         Linking.canOpenURL(appstoreURL)
+           .then(() =>
+             Linking.openURL(appstoreURL)
+           )
+           .catch();
+       }
+
+  }
+
   handleSelection = (id, dbQuery) => {
     this.props.selectedDashboardDetails(id, dbQuery);
     this.setState({selectedId: id});
