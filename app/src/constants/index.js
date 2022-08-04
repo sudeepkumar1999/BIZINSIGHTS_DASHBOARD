@@ -143,6 +143,7 @@ export const  DASHBOARD_NOTFOUND_ERROR="Dashboard details not found"
 export const UPDATE_DASHBOARD_ERROR="Error occurred while updating dashboard "
 export  const  VALID_LICENCE_ERROR="valid licence not found"
 
+
 export  const  SESSION_EXPIRE_MESSAGE="Session expired please restart"
 
 
@@ -152,6 +153,9 @@ export   const verifymsg = " Please enter verificationCode "
 export const DATA_CLEAR_MESSAGE="This action will clear your data"
 export const MSG ="Are you sure you want to go back?"
 
+export const UPDATE_MESSAGE_ONE="You will have to update your app to latest version to continue using.";
+export const UPDATE_MESSAGE_TWO="New version of the app is available. Do you want to update?";
+export const UPDATE_TITLE="Please Update";
 export const TODAY="Today";
 export const WEEK="Week";
 export const CURRENCY="$";

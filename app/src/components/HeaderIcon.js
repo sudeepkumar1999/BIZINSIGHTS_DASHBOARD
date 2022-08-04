@@ -32,7 +32,7 @@ const HeaderTitle=()=>
   
 
     </Image>
-    <Text style={{  textAlign:'justify', alignSelf:'center', fontSize:16,fontWeight:'bold'}}>{" "}{config.VERSION_NAME}</Text>
+    <Text style={{  marginRight:10*vw, textAlign:'justify', alignSelf:'center', fontSize:16,fontWeight:'bold'}}>{" "}{config.VERSION_NAME}</Text>
     </View>
     
          
@@ -91,7 +91,7 @@ const HeaderIcon=()=>
       <View  style={{paddingRight:5*vw}}>
         <Menu
             ref={setMenuRef}
-            button={<Text onPress={showMenu}> <Icon name='power-sharp'   size={vw*7} color='#000' /></Text>}
+            button={<Text onPress={showMenu}> <Icon name='power-sharp'    size={vw*7} color='#000' /></Text>}
         >
             <MenuItem  onPress={signout}>Sign out</MenuItem>
             <MenuItem onPress={signoutAll}>Sign out from all devices</MenuItem>

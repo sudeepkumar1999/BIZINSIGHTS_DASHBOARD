@@ -8,18 +8,16 @@ import {config} from '../../constants/parafaitConfig';
 // import * as Constants from '../../constants'
 
 export const updateRequired = (deprecated) => {
+  // console.log("update required ", response?.data.Deprecated)
   return (dispatch) => {
     dispatch({type: types.SET_DEPRECATED, payload: deprecated});
   };
 };
 
 const setLastUpdatedTime = (response) => {
-  console.log('hi');
-
   return (dispatch) => {
-    console.log('hi ******');
     dispatch({type: types.LAST_UPDATED_TIME, payload: new Date()});
-    if (response?.data.Deprecated != '') {
+    if (response?.data.Deprecated == '') {
       dispatch(updateRequired(response?.data.Deprecated));
     }
   };
@@ -27,7 +25,6 @@ const setLastUpdatedTime = (response) => {
 
 export const checkForUpdate = (securitycode) => {
   return async (dispatch) => {
-    console.log('security code ****', securitycode);
     let securityCode = securitycode.slice(-2);
     const currentTime = generateDate();
     const hashedVal = generateHashCode(
@@ -35,8 +32,6 @@ export const checkForUpdate = (securitycode) => {
       securitycode,
       currentTime,
     );
-    console.log('security code 1', securityCode);
-    console.log('security code ', securitycode);
 
     try {
       const response = await ServiceHandler.post({
@@ -64,7 +59,7 @@ export const checkValidToken = async () => {
   try {
     const response = await ServiceHandler.get({
       url: Constants.CLIENT_APPS,
-      data: {queryParameters: {appId: Constants.APP_ID}},
+      data: {queryParameters: {appId: config.APP_ID}},
       timeout: ParafaitServer.DEFAULT_TIMEOUT,
     });
 

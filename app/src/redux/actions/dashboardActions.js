@@ -14,7 +14,8 @@ var TOTAL_COLLECTION_SITE_ID = '9999';
 var asyncStorageHandler = new AsyncStorageHandler();
 const isTableauDashboard = config.ISTABLEUDASHBOARD == 'true' ? true : false;
 
-const data = isTableauDashboard ? {} : {queryParameters: {dashboardType: 'R'}};
+
+const tabData= isTableauDashboard ? {} : {queryParameters: {dashboardType: 'R'}};
 
 export const getSalesDashboard = () => {
   return (dispatch, getState) => {
@@ -74,7 +75,7 @@ export const getSalesDashboard = () => {
                 }
               });
             }
-
+            
             dispatch({
               type: types.SET_TODAY_COLLECTION,
               payload: todaySiteList,
@@ -88,6 +89,10 @@ export const getSalesDashboard = () => {
               type: types.FETCH_SALES_DASHBOARD_SUCCESS,
               payload: siteList,
             });
+            
+            
+
+            
           } else {
             dispatch({
               type: types.FETCH_SALES_DASHBOARD_FAILURE,
@@ -148,11 +153,13 @@ export const getBusinessStartTime = (showLoader = true) => {
 };
 
 export const getTableauDashboard = (showLoader = true) => {
+  console.log("dashboard type error", config.ISTABLEUDASHBOARD)
+
   return (dispatch, getState) => {
     if (showLoader) dispatch({type: types.FETCH_DASHBOARD_DETAILS_REQUEST});
     ServiceHandler.get({
       url: Constants.TABLEU_DASHBOARD,
-      data: data,
+      data:  Boolean( JSON.parse(config.ISTABLEUDASHBOARD))? {}:{queryParameters: {dashboardType: 'R'}},
       timeout: ParafaitServer.DEFAULT_TIMEOUT,
     })
       .then((response) => {
@@ -261,7 +268,6 @@ export function setUrlTelerik(dbQuery) {
 
     let reportURL = dbQuery;
 
-    console.log('telrik ******', reportURL);
     reportURL = reportURL.replace('@User', loginId);
     reportURL = reportURL.replace('@Date', formatedDate);
     reportURL = reportURL.replace('@Time', formatedTime);
@@ -348,3 +354,6 @@ export function asyncFailure(error) {
     payload: error,
   };
 }
+
+
+

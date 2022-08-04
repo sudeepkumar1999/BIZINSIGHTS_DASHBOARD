@@ -38,14 +38,26 @@ function request(params, sendLogs = true) {
   var qs = "";
   var body;
  var host = ParafaitServer.PUBLIC_SERVER_IP_PRODUCTION; //ParafaitServer.PUBLIC_SERVER_IP_LOCAL 
-  var tempParams = JSON.parse(JSON.stringify(params));
+ var tempParams = JSON.parse(JSON.stringify(params));
   // var requestTimeout = (!GenericMethods.IsUndefined(store.getState().appConfig)) ? store.getState().appConfig.idleTimeout * 1000 : params.timeout || Constants.REQUEST_TIMEOUT;
   var requestTimeout = params.timeout || Constants.REQUEST_TIMEOUT;
+
   var headers = {
     Accept: "application/json",
-    Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+  //  Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+   "Content-Type": "application/json",
     
-  };
+  }
+  if(params.url.includes('/ClientApp/ClientAppVersion'))
+  {
+ 
+  headers = {
+    Accept: "application/json",
+   Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+   "Content-Type": "application/json",
+    
+  }
+};
 
   if (!GenericMethods.objectIsEmpty(store.getState().client.clientDTO)) {
    
@@ -63,7 +75,7 @@ function request(params, sendLogs = true) {
       headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+        //Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
         
       };
 
@@ -73,20 +85,21 @@ function request(params, sendLogs = true) {
       )
       {
      
-      if (params.url.includes('/Login/AuthenticateUsers')||params.url.includes('/ClientApp/ClientAppVersion')) {    
+      if (params.url.includes('/Login/AuthenticateUsers')) {    
       headers = {
       'Accept': 'application/json',
-      'Origin': 'mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=',
+      // 'Origin': 'mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=',
       'Content-Type': 'application/json',
       }
       }
+      
       else
             
       {
         headers = {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+          // Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
           Authorization: store.getState().deviceInfo.token,
          
         };
@@ -221,7 +234,8 @@ function callRestServices(
   tempParams
 ) {
   console.log("url ***** ",  url);
-  // console.log(body)
+  console.log("headers ****", headers)
+  console.log(body)
   // if (store.getState().customer.isLoggedIn && sendLogs) {
   //   return userlogs(tempParams, host, headers, body, qs, requestTimeout);
   // } else {
@@ -236,6 +250,8 @@ function callRestServices(
       .then((response) => {
         if(response.status===200)
         {
+
+          console.log("response ********",JSON.stringify( response?.data));
          
       if(response.config.url.indexOf(ParafaitServer.AUTHENTICATE_USER) > -1 )
       {
@@ -329,7 +345,7 @@ function logUserAction(controller, userAction, state, message) {
   let headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
-    Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
+    // Origin: "mQ/btZP6wd74Sgd59JETzEtAkBO8QIL4KpE2pjz9hRg=",
     Authorization: store.getState().deviceInfo.token
   };
   let data = new UserLogDTO({

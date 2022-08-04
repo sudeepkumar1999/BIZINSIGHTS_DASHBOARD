@@ -3,16 +3,16 @@ import {Text, TouchableOpacity, StyleSheet, View} from 'react-native';
 
 
 
-const  DashboardActivityCard= ({collectionAmt,collectionText, consumptionAmt, consumptionText, cardTitle, onPress}) => {
+const  DashboardActivityCard= ({collectionAmt,collectionText, consumptionAmt, consumptionText, cardTitle, onPress, currencySymbol}) => {
   return (
   
        <TouchableOpacity style={styles.container} onPress={onPress}>
           <Text style={styles.cardTitle}>{cardTitle}</Text>
             <View style={styles.collectionView}>
                 <View style={styles.collectionContainer}>
-                   <Text style={styles.collectionAmtText}>$ {collectionAmt}</Text>
+                   <Text style={styles.collectionAmtText}>{currencySymbol} {collectionAmt}</Text>
                     <View style={styles.lineView}></View>
-                    <Text style={styles.collectionText} >{collectionText}</Text>
+                    <Text style={styles.collectionText} >{currencySymbol} {collectionText}</Text>
                 </View>
                 <View style={styles.collectionContainer}>
                     <Text style={styles.collectionAmtText}>$ {consumptionAmt}</Text>

@@ -12,6 +12,7 @@ import {generateDate,generateHashCode, generateUUID } from '../../utilitis'
 var asyncStorageHandler = new AsyncStorageHanlder();
 import NavigationService from '../../lib/NavigationService'
 import {getTableauDasboard, getBusinessStartTime, getSalesDashboard} from './dashboardActions'
+import { config } from '../../constants/parafaitConfig'
 
 export function intialSetUp( deviceGUID, clientDTO, gatewayURL)
 {
@@ -50,9 +51,10 @@ export function authenticateUser(loginId, password) {
               try {
                 if (response instanceof Error) throw response;
                 if (response.statusCode === 200) {
+                  console.log("login success",  JSON.stringify(response.data))
                   dispatch({
                     type: types.AUTHENTICATE_CLIENT_DETAILS_SUCCESS,
-                    payload: response.data.userDTO.UserId  //
+                    payload: response.data.userDTO.UserId  
                   });
                   dispatch({
                     type:types.SET_LOGIN_ID, payload: response.data.userDTO.LoginId
@@ -62,6 +64,7 @@ export function authenticateUser(loginId, password) {
                    
                   //  dispatch(getBusinessStartTime(false))
                   //  dispatch(getSalesDashboard())
+                  dispatch(getDefaultAppConfiguration(response.data?.userDTO?.SiteId));
                   dispatch(getClientApp(loginId, password,response.data?.userDTO?.UserId , response.data?.userDTO?.SiteId));
 
                   asyncStorageHandler.setItem(Constants.USER_NAME,response.data.userDTO.UserName)
@@ -71,6 +74,7 @@ export function authenticateUser(loginId, password) {
 
                   
                 } else { 
+                   console.log("login fail ******", response)
                     //dispatch({type:types.SET_ERROR_CODE, payload:response.statusCode})
                     dispatch({ type: types.AUTHENTICATE_CLIENT_DETAILS_FAILURE, payload: new Error(response?.data || Constants.UNKNOWN_ERROR_MESSAGE) });
                 }
@@ -92,11 +96,11 @@ export function authenticateUser(loginId, password) {
 
     export function getClientApp(loginId,password,userId, siteId)
     {
-      
+      console.log("get client appp")
       return (dispatch,getState)=>
       {
         dispatch({type:types.FETCH_CLIENT_APP_DETAILS_REQUEST})
-        ServiceHandler.get({ url: Constants.CLIENT_APPS, data: { queryParameters: { appId: Constants.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
+        ServiceHandler.get({ url: Constants.CLIENT_APPS, data: { queryParameters: { appId: config.APP_ID} }, timeout: ParafaitServer.DEFAULT_TIMEOUT })
         .then(response => {
           
             try {
@@ -184,7 +188,7 @@ export function authenticateUser(loginId, password) {
           })
           .catch((error) => {
              
-              //dispatch({type:types.SET_ERROR_CODE, payload:ParafaitServer.ERROR_TYPES.REQUEST_TIMEOUT})
+            
 
               dispatch({ type: types.REGISTER_CLIENT_DETAILS_FAILURE, payload: error });
           });
@@ -246,16 +250,15 @@ export function authenticateUser(loginId, password) {
                   asyncStorageHandler.setItem(Constants.PASSWORD, '')
                   asyncStorageHandler.setItem(Constants.SET_ON_CHECK, false)
                   
-                //asyncStorageHandler.setItem(Constants.SET_ON_CHECK, true)
+               
                 }
-              //console.log("dartfctfcyfcyfcyfciyf ug lug lug luh g" +checked)
+             
               })
               .catch((error) => {
                   
                   })
 
-              // asyncStorageHandler.setItem(Constants.USER_ID, loginId)
-              // asyncStorageHandler.setItem(Constants.PASSWORD, password)
+           
               
 
               NavigationService.reset({
@@ -405,3 +408,124 @@ export function authenticateUser(loginId, password) {
           }
         }
   
+        export function getDefaultAppConfiguration(siteId) {
+          // console.log("**************")
+          return (dispatch, getState) => {
+            dispatch({ type: types.FETCH_DEFAULT_APP_CONFIGURATION_REQUEST });
+            ServiceHandler.get({
+              url: ParafaitServer.DEFAULT_CONFIGURATION,
+              data: {
+                queryParameters: {
+                  siteId: siteId,
+                  userPkId: -1,
+                  machineId: -1,
+                  hash: null,
+                  rebuildCache: false,
+                },
+              },
+              timeout: ParafaitServer.DEFAULT_TIMEOUT,
+            })
+              .then((response) => {
+                try {
+                   console.log(" default config ****"+ response.data)
+                  
+                  if (response instanceof Error) throw response;
+                  if (response.statusCode === 200) {
+                    //let appConfig = new AppAccessDTO(response.data);
+        
+                    dispatch(setDefaultAppConfiguration(response.data));
+                    // dispatch({ type: types.FETCH_STRINGS });
+                    
+                
+                  } else {
+                    dispatch({
+                      type: types.FETCH_DEFAULT_APP_CONFIGURATION_FAILURE,
+                      payload: new Error("Unhandled Response"),
+                    });
+                  }
+                } catch (error) {
+                 
+                  dispatch({
+                    type: types.FETCH_DEFAULT_APP_CONFIGURATION_FAILURE,
+                    payload: error,
+                  });
+                }
+              })
+              .catch((error) => {
+                
+                dispatch({
+                  type: types.FETCH_DEFAULT_APP_CONFIGURATION_FAILURE,
+                  payload: error,
+                });
+              });
+          };
+        }
+
+
+
+        export function setDefaultAppConfiguration(defaultConfig) {
+
+          console.log("set default app configuration", JSON.stringify(defaultConfig))
+
+          let defaultLanguage= store.getState().site?.defaultLanguage || -1;
+          //let localLanguage =store.getState().site?.localLanguage||-1;
+          //console.log("default Language from the store ******",localLanguage )
+         
+          //var v=defaultConfig.ParafaitDefaultContainerDTOList.map((item)=>[item.DefaultValueName, item.DefaultValue])
+          defaultConfig = defaultConfig.ParafaitDefaultContainerDTOList.reduce(
+            (obj, item) =>
+              Object.assign(obj, { [item.DefaultValueName]: item.DefaultValue }),
+            {}
+          );
+          
+          //this.props.appConfig.cmsSocialLinksDTO.map((item) => [
+          //   item.LinkName.toLowerCase(),
+          //   item.Url,
+          // ])
+        
+         
+        
+          var obj = {
+            // allowDecimal:
+            //   defaultConfig.ALLOW_DECIMALS_IN_VARIABLE_RECHARGE == "Y" ? true : false,
+            // maxLimit: Number(defaultConfig.MAX_VARIABLE_RECHARGE_AMOUNT) || 100,
+            // cardValidity: defaultConfig.CARD_VALIDITY || 12,
+            // cardExpiryRule: defaultConfig.CARD_EXPIRY_RULE,
+            // dateFormat: defaultConfig.DATE_FORMAT || "dd-mm-yyyy",
+            // websiteTime: getTimeZone(defaultConfig?.WEBSITE_TIME_ZONE) || "+05:30",
+            // enableDiscount:
+            //   defaultConfig?.ENABLE_DISCOUNTS_IN_POS == "Y" ? true : false,
+            // defaultLanguage: defaultLanguage!=-1 ? defaultLanguage : defaultConfig?.DEFAULT_LANGUAGE || -1,
+            // enableSite:
+            //   defaultConfig?.ENABLE_SITEDROPDOWN_CUSTOMERAPP == "Y" ? true : false,
+            // showGamesOnCard: defaultConfig?.SHOW_GAMES_ON_CARD == "Y" ? true : false,
+            // showPassword:defaultConfig?.ENABLE_PASSWORD_ON_SMARTFUN=="Y"?true:false,
+            // securityPolicy:defaultConfig?.CUSTOMER_REGISTRATION_SECURITY_POLICY||"",
+            currencySymbol:defaultConfig?.CURRENCY_SYMBOL||'$'
+          };
+          
+          
+          console.log("object sent", obj)
+        
+          return (dispatch, getState) => {
+            dispatch({
+              type: types.FETCH_DEFAULT_APP_CONFIGURATION_SUCCESS,
+              payload: obj,
+            });
+            // if(defaultLanguage!=obj.defaultLanguage&&obj.defaultLanguage!=""&&obj.defaultLanguage!=-1)
+            // {
+            
+            dispatch({type: types.SET_DEFAULT_LANGUAGE,payload:obj.defaultLanguage})
+            if(obj?.defaultLanguage!=-1&&Boolean(obj?.defaultLanguage) )
+            {
+            dispatch({ type: types.FETCH_STRINGS });
+            }
+            if(obj?.securityPolicy!="")
+            {
+              dispatch(getSecurityPolicies(obj.securityPolicy))
+            }
+           //}
+          
+            
+          };
+        }

@@ -129,11 +129,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.semnox.analyticsdashboardapp"
+        applicationId "com.semnox.analyticsdashboardapplite"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 213072
-        versionName "2.130.7.0"
+        versionCode 213092
+        versionName "2.130.9.1"
     }
     splits {
         abi {

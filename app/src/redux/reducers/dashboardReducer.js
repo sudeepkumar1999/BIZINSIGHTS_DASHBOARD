@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import dateFormat, { masks } from "dateformat";
 let initialState = {
   dashboardDTO: [],
   startTime: null,
@@ -16,6 +17,8 @@ let initialState = {
   currentDate: new Date().toString(),
   todayCollectionList: [],
   weeklyCollectionList: [],
+  lastReportFetchTime:dateFormat(new Date(), "dddd, mmmm dd, yyyy, h:MM:ss TT"),
+  
 };
 
 export const dashboard = (state = initialState, action) => {
@@ -41,6 +44,12 @@ export const dashboard = (state = initialState, action) => {
         ...state,
         token: action.payload,
       };
+    case types.FETCH_CURRENT_TIME:
+      
+      return {
+        ...state,
+        lastReportFetchTime:action.payload
+      }
     case types.SET_REPORT_ID:
       return {
         ...state,
@@ -79,6 +88,7 @@ export const dashboard = (state = initialState, action) => {
         totalCollection: action.payload,
       };
     case types.FETCH_SALES_DASHBOARD_SUCCESS:
+     
       return {
         ...state,
         siteList: action.payload,

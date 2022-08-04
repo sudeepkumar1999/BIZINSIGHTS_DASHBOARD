@@ -37,10 +37,13 @@ export class ParafaitServer {
     public static readonly ERROR_TYPES = ERROR_TYPES;
 
     //production
-    public static readonly PUBLIC_SERVER_IP_PRODUCTION =  'https://parafaitios.parafait.com' //'https://dashboardtestwebapi.parafait.com' // "https://smartfunapp.parafait.com"  //   //'https://parafaitdevcentral.parafait.com'  //"https://smartfunapp.parafait.com";
+    public static readonly PUBLIC_SERVER_IP_PRODUCTION = 'https://smartfunapp.parafait.com'; //'https://parafaitios.parafait.com' //'https://dashboardtestwebapi.parafait.com' // "https://smartfunapp.parafait.com"  //   //'https://parafaitdevcentral.parafait.com'  //"https://smartfunapp.parafait.com";
 
     //aws
    public static readonly PUBLIC_SERVER_IP_LOCAL = 'https://parafaitdevcentral.parafait.com';
+
+   
+   
 
     
     // public static readonly PUBLIC_SERVER_IP_LOCAL = 'https://webmngapi.parafait.com' //'https://parafaitios.parafait.com'
@@ -117,6 +120,8 @@ export class ParafaitServer {
     public static readonly PUSH_NOTIFICATION_DEVICES = ParafaitServer.COMMUNICATION_CONTROLLER + '/PushNotificationDevices';
     public static readonly MESSAGING_REQUESTS = ParafaitServer.COMMUNICATION_CONTROLLER + '/MessagingRequests';
 
+    //Default Container
+    public static readonly DEFAULT_CONFIGURATION ="api/Configuration/ParafaitDefaultContainer";
 
 }
 

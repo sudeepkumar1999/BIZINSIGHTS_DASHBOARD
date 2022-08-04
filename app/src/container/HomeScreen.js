@@ -49,12 +49,13 @@ import * as Constants from '../constants';
 var RNFS = require('react-native-fs');
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Progress from 'react-native-progress';
+import dateFormat, { masks } from "dateformat";
 
 
 
-const appstoreURL = 'https://itunes.apple.com/app/id1547246277';
+const appstoreURL = 'https://itunes.apple.com/app/id1634566995';
 const playStoreURL =
-  'https://play.google.com/store/apps/details?id=com.semnox.analyticsdashboardapp';
+  'https://play.google.com/store/apps/details?id=com.semnox.analyticsdashboardapplite';
 
 ///import ?* as  Constants from '../constants'
 
@@ -217,6 +218,7 @@ class HomeScreen extends Component {
       showTodayPos: false,
       showWeekPos: false,
       selectedSite: null,
+      
     };
   }
 
@@ -231,17 +233,17 @@ class HomeScreen extends Component {
       this.setState({
         dashboard: this.props.dashboard,
       });
-      console.log("json stringy fy", JSON.stringify(this.props.dashboard))
+     this.props.getSalesDashboard();
      this.props.selectedDashboardDetails(this.props.dashboard[0].ReportId, this.props.dashboard[0].DBQuery)
      
     }
 
-    if(response?.data?.Deprecated=='M')
+    if(this.props.deprecated=='M')
     {
 
      Alert.alert(
-         "Please Update",
-         "You will have to update your app to latest version to continue using.",
+         Constants.UPDATE_TITLE,
+         Constants.UPDATE_MESSAGE_ONE,
          [
            
            { text: "Ok", onPress: () => {
@@ -255,11 +257,11 @@ class HomeScreen extends Component {
      }
 
   
-  else if(response.data?.Deprecated=='O')
+  else if(this.props.deprecated=='O')
   {
      Alert.alert(
-         "Please Update",
-         "New version of the app is available. Do you want to update?",
+        Constants.UPDATE_TITLE,
+         Constants.UPDATE_MESSAGE_TWO,
          [
            {
              text: "Later",
@@ -405,6 +407,8 @@ class HomeScreen extends Component {
   };
 
   render() {
+
+   
     const {CollectionToday, GamePlayToday, GamePlayWeek, CollectionWeek} =
       this.props?.totalCollection;
 
@@ -465,18 +469,39 @@ class HomeScreen extends Component {
             />
           }>
           {this.state.showHome ? (
+            <View>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
               }}>
+              {this.state.showTodayReport||this.state.showWeekReport ?
+              (
+               <Icon
+                onPress={() => 
+                
+                this.setState(
+                  {
+                    showTodayReport:false,
+                    showWeekReport:false,
+                    //showHome:true
+
+                  }
+                )
+                }
+                name="arrow-back-circle-sharp"
+                size={vw * 9}
+                color="#000"
+                style={{alignSelf: 'center', paddingTop: 10,  paddingLeft:5}}
+              />):null}
               <Text
                 style={{
-                  fontSize: 14,
+                  fontSize: 3.5*vw,
                   alignSelf: 'center',
                   paddingTop: 10,
-                  paddingLeft: 10,
+                  paddingLeft: 5,
+                  paddingRight: 5,
                 }}>
                 {this.props.currentDate}
               </Text>
@@ -489,8 +514,20 @@ class HomeScreen extends Component {
                 name="refresh-circle"
                 size={vw * 9}
                 color="#000"
-                style={{alignSelf: 'center', paddingTop: 10, paddingRight: 10}}
+                style={{alignSelf: 'center', paddingTop: 10,  paddingRight:5}}
               />
+            </View>
+            {/* <Text
+                style={{
+                  fontSize: 14,
+                  alignSelf: 'center',
+                  paddingTop: 10,
+                  paddingLeft: 10,
+                  justifyContent: 'space-evenly',
+                }}>
+                {dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT")}
+               
+              </Text> */}
             </View>
           ) : null}
 
@@ -518,9 +555,10 @@ class HomeScreen extends Component {
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: 10,
+                  padding: 5,
                 }}>
                 <DashboardActivityCard
+                currencySymbol={this.props.currencySymbol||'$'}
                   collectionAmt={CollectionToday}
                   consumptionAmt={GamePlayToday}
                   collectionText={Constants.COLLECTION}
@@ -529,6 +567,7 @@ class HomeScreen extends Component {
                   onPress={this.onTodayLayoutPress}
                 />
                 <DashboardActivityCard
+                currencySymbol={this.props.currencySymbol||'$'}
                   collectionAmt={CollectionWeek}
                   consumptionAmt={GamePlayWeek}
                   collectionText={Constants.COLLECTION}
@@ -575,15 +614,18 @@ const mapStateToProps = (state) => {
     loading: state.ui.loading,
     clientGateway: state.client.clientGateway,
     userDTO: state.user.clientAppUserLoginDTO,
+    currencySymbol:state.user.defaultConfig.currencySymbol,
     guId: state.user.deviceGUID,
     errorCode: state.ui.errorCode,
     clientDTO: state.client.clientDTO,
+    deprecated: state.client.deprecated,
     updateRequired: state.dashboard.updateDashboard,
     totalCollection: state.dashboard.totalCollection,
     siteList: state.dashboard.siteList,
     currentDate: state.dashboard.currentDate,
     todayCollectionList: state.dashboard.todayCollectionList,
     weeklyCollectionList: state.dashboard.weeklyCollectionList,
+    lastReportFetchTime: state.dashboard.lastReportFetchTime
   };
 };
 

@@ -9,6 +9,7 @@ let initialState = {
   deviceGUID: null,
   isChecked: false,
   hideSecurityCode: false,
+  defaultConfig:{}
 };
 export const user = (state = initialState, action) => {
   switch (action.type) {
@@ -22,6 +23,15 @@ export const user = (state = initialState, action) => {
         ...state,
         loginId: action.payload,
       };
+
+      case types.FETCH_DEFAULT_APP_CONFIGURATION_SUCCESS:
+        console.log("reducer object", action.payload )
+        {
+          return {
+            ...state,
+            defaultConfig: action.payload,
+          };
+        }
 
     case types.FETCH_CLIENT_APP_DETAILS_SUCCESS:
       return {

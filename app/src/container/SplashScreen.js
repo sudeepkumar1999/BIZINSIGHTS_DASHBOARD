@@ -23,6 +23,7 @@ const playStoreURL =
 import {generateUUID} from '../utilitis';
 import {store} from '../../index';
 import {config} from '../constants/parafaitConfig';
+
 // const clientLastUpdated =
 //   store?.getState()?.client?.lastClientUpdated ?? new Date(-1);
 

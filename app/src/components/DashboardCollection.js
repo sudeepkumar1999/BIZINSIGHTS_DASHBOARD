@@ -49,11 +49,11 @@ const  DashboardCollection= ({siteList, onPress, siteId, pastCollectionText, cur
          
             <View style={styles.flatListContainer}>
               <Text style={styles.siteText} >{SiteName}</Text>
-              <TouchableOpacity  style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}} 
+              <TouchableOpacity  style={{flexDirection:'row', backgroundColor:'red', alignItems:'center', justifyContent:'center'}} 
               onPress={()=>onPress(SiteId)} 
       
       >
-                <View style={styles.siteCollectionView}>
+                <View style={[styles.siteCollectionView, {flex:1}]}>
                   <Text style={styles.siteCollectionText}>$ {PastCollection}</Text>
                   <Text style={styles.siteConsumptionText}>{Constants.COLLECTION}</Text>
                   <View style={{margin:2.5}}></View>
@@ -61,7 +61,7 @@ const  DashboardCollection= ({siteList, onPress, siteId, pastCollectionText, cur
                   <Text style={styles.siteConsumptionText}>{Constants.CONSUMPTION}</Text>
       
                 </View>
-                <View style={[styles.siteCollectionView, { backgroundColor:'#DCDCDC'}]}>
+                <View style={[styles.siteCollectionView, { backgroundColor:'#DCDCDC', flex:1}]}>
                     <Text style={styles.siteCollectionText}>$ {PresentCollection}</Text>
                     <Text style={styles.siteConsumptionText}>{Constants.COLLECTION}</Text>
                     <View style={{margin:2.5}}></View>
@@ -96,9 +96,9 @@ const  DashboardCollection= ({siteList, onPress, siteId, pastCollectionText, cur
   return (
   
     <View style={{flex:1, backgroundColor:'#C0C0C0'}}> 
-    <View style={[styles.siteCollectionView,{flexDirection:'row', padding:15, backgroundColor:'grey'}]}>
-          <Text style={{fontSize:16, color:'white', fontWeight:'bold', alignSelf:'center'}}>{pastCollectionText}</Text>
-          <Text style={{fontSize:16, color:'white', fontWeight:'bold', alignSelf:'center'}}>{currentCollectionText}</Text>
+    <View style={[styles.siteCollectionView,{ backgroundColor:'grey', flexDirection:'row'}]}>
+          <Text style={{fontSize:16, color:'white', fontWeight:'bold',alignItems:'center'}}>{pastCollectionText}</Text>
+          <Text style={{fontSize:16, color:'white', fontWeight:'bold', alignItems:'center'}}>{currentCollectionText}</Text>
     
         </View>
         <FlatList
@@ -182,6 +182,7 @@ const styles=StyleSheet.create({
       padding:5,
       paddingHorizontal:0,
       justifyContent:'space-evenly',
+      width:'100%',
       backgroundColor:'#C0C0C0',
 
     },
@@ -193,7 +194,7 @@ const styles=StyleSheet.create({
     },
 
     siteCollectionView:{
-      flex:1,
+      // flex:1,
       justifyContent:"space-evenly",
       padding:5,
       alignItems:'center',
